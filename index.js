@@ -7,6 +7,10 @@ const path = require('path');
 /* Settings */
 const app = express();
 
+/* Initializations */
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, './views/layout/'));
+
 /* Middlewares */
 
 /* Routes */

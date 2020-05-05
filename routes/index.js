@@ -1,8 +1,6 @@
 const { Router } = require('express');
 const router = Router();
 
-router.get('/', (req, res) => {
-    res.send('Hola Mundo Para El Navegador');
-});
+router.use(require('../controllers/index'));
 
 module.exports = router;

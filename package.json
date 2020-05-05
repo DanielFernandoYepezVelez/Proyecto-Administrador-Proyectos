@@ -4,12 +4,13 @@
     "description": "",
     "main": "index.js",
     "dependencies": {
-        "express": "^4.17.1"
+        "express": "^4.17.1",
+        "pug": "^2.0.4"
     },
     "devDependencies": {},
     "scripts": {
         "start": "node index.js",
-        "dev": "nodemon index.js"
+        "dev": "nodemon index.js -e js, pug, css"
     },
     "author": "",
     "license": "ISC"
