@@ -8,8 +8,8 @@ html(lang="es" dir="ltr")
     meta(name="keywords" content="HTML5, CSS3, JavaScript, Template Engine")
     meta(http-equiv="X-UA-Compatible", content="ie=edge")
     title UpTask Project
-    link(rel="stylesheet", href="css/normalize.css")
-    link(rel="stylesheet", href="css/app.css")
+    link(rel="stylesheet", type="text/css" href="css/normalize.css")
+    link(rel="stylesheet", type="text/css" href="css/app.css")
   body
     header.barra
       h1 UpTask - Administrador De Proyectos
@@ -18,17 +18,16 @@ html(lang="es" dir="ltr")
     main.contenedor
       aside.contenedor-proyectos
         .panel.crear-proyecto
-          a(href="/nuevo-proyecto" class="boton") Crear Proyecto
+          a(href="/new-project" class="boton") Crear Proyecto
             span +
         .panel.lista-proyectos
           h2 Poyectos
           ul#proyectos.proyectos
-            li
-              a(href="#") Diseño Tienda Virtual
-            li
-              a(href="#") Diseño Nuevo Blog
-            li
-              a(href="#") Diseño De Logotipo
+            if(projectsAll.length)
+              each project in projectsAll
+                li
+                  a(href=`/${project.url}`)= project.nameProject
       block contenido
-        
-              
+        .contenido-principal
+          h1= title
+        pre= vardump(projectsAll)

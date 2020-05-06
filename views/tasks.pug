@@ -1,0 +1,9 @@
+extends ./layout/main
+
+block contenido
+  .contenido-principal
+    h1 #{title} - #{projectOne.nameProject}
+
+    .contenedor-acciones
+      a(href=`/${projectOne.id}` class="boton") Editar Proyecto
+      button#eliminar-proyecto(type="button" class="boton eliminar") Eliminar Proyecto
