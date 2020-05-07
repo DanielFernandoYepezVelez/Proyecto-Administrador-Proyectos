@@ -4,6 +4,29 @@ block contenido
   .contenido-principal
     h1 #{title} - #{projectOne.nameProject}
 
+    form.agregar-tarea(action=`/task/${projectOne.url}` method="POST")
+      .campo
+        label(for="task") Tarea:
+        input.nombre-tarea(type="text", name="task" placeholder="Nombre Tarea")
+      .campo-enviar
+        input.boton.nueva.tarea(type="submit", value="Agregar")
+
+        //- pre= vardump(tasks)
+    .listado-pendientes
+      ul
+        if tasks.length
+          each task in tasks
+            li.tarea(data-task=projectOne.url+':'+task.id)
+              p= task.task
+              .acciones
+                if task.state
+                  i.far.fa-check-circle.completo
+                else
+                  i.far.fa-check-circle
+                i.fas.fa-trash
+        else
+          p No Hay Tareas En Este Proyecto
+
     .contenedor-acciones
       a(href=`/${projectOne.id}` class="boton") Editar Proyecto
-      button#eliminar-proyecto(type="button" class="boton eliminar") Eliminar Proyecto
+      button#eliminar-proyecto(data-project-url= projectOne.url type="button" class="boton eliminar") Eliminar Proyecto
