@@ -8,7 +8,7 @@ block contenido
       each error in errors
         .alerta.error= error.texto
 
-    form.agregar-proyecto(action=`/${projectOne.id}` method="POST")
+    form.agregar-proyecto(action=`/project/${projectOne.id}` method="POST")
         .campo
           label(for="name") Nombre Proyecto:
           input(type="text" id="name" name="nameProject" placeholder="Nombre Proyecto" value= projectOne.nameProject)

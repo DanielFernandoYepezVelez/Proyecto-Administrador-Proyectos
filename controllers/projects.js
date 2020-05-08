@@ -15,7 +15,7 @@ router.get('/', async(req, res) => {
     }
 });
 
-router.get('/new-project', async(req, res) => {
+router.get('/project/newProject', async(req, res) => {
     try {
         const projectsAll = await Project.findAll();
 
@@ -27,24 +27,22 @@ router.get('/new-project', async(req, res) => {
 
 /* List Project */
 /* Codigo Mejorado, Consultas Independientes */
-router.get('/:url', async(req, res, next) => {
+router.get('/project/:url', async(req, res, next) => {
     try {
         const { url } = req.params;
 
         const projectsAllPromise = Project.findAll();
         const projectOnePromise = Project.findOne({ where: { url } });
+
         const [projectsAll, projectOne] = await Promise.all([projectsAllPromise, projectOnePromise]);
 
         /* Listar Tareas De Ese Proyecto */
         /* ProjectOne Ya Me Entrega El ID */
-        const tasks = await Task.findAll({
-            where: {
-                "projectId": projectOne.id
-            }, // Incluyendo El Modelo Del Proyecto
-            // include: [
-            //     { model: Project }
-            // ]
-        });
+        const tasks = await Task.findAll({ where: { projectId: projectOne.id } });
+        // Incluyendo El Modelo Del Proyecto
+        // include: [
+        //     { model: Project }
+        // ]
 
         if (!projectOne) return next();
 
@@ -56,7 +54,7 @@ router.get('/:url', async(req, res, next) => {
 
 /* Edit Project */
 /* Codigo Mejorado, Consultas Independientes */
-router.get('/:id', async(req, res) => {
+router.get('/project/:id', async(req, res) => {
     try {
         const { id } = req.params;
 
@@ -70,7 +68,7 @@ router.get('/:id', async(req, res) => {
     }
 });
 
-router.post('/newProject', [body('nameProject').not().isEmpty().trim().escape()], async(req, res) => {
+router.post('/project/newProject', [body('nameProject').not().isEmpty().trim().escape()], async(req, res) => {
     try {
         const { nameProject } = req.body;
         let errors = [];
@@ -88,7 +86,7 @@ router.post('/newProject', [body('nameProject').not().isEmpty().trim().escape()]
     }
 });
 
-router.post('/:id', [body('nameProject').not().isEmpty().trim().escape()], async(req, res) => {
+router.post('/project/:id', [body('nameProject').not().isEmpty().trim().escape()], async(req, res) => {
     const { id } = req.params;
     const { nameProject } = req.body;
     let errors = [];

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+html(lang="es" dir="ltr")
+  head
+    include ./partials/header
+  body.login
+    .contenedor-formulario
+      h1= title
+
+      if locals.errors
+        .alertas
+          each categoria in Object.keys(locals.mensajes)
+            each error in errors[categoria]
+              
+            
+            
+          
+
+
+        each error in errors
+          p.error.alerta= error.message
+                  
+      form#formulario.caja.caja-login(action="/user/createAccount" method="POST")
+        .campo
+          label(for="email") E-mail:
+          input(type="email" name="email" placeholder="Email")
+        .campo
+          label(for="password") Password:
+          input(type="password", name="password" placeholder="password")
+        .campo.enviar
+          input.boton(type="submit" value="Crear Cuenta")
+        .campo
+          a(href="#") Volver a Iniciar Sesión
+    script(src="/dist/bundle.js")

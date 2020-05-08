@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import { updateAvance } from '../functions/avance';
 
 const tasks = document.querySelector('.listado-pendientes');
 
@@ -14,6 +15,7 @@ if (tasks) {
                 .then((resp) => {
                     if (resp.status === 200) {
                         e.target.classList.toggle('completo');
+                        updateAvance();
                     }
                 }).catch((err) => console.log(err));
         }
@@ -40,6 +42,7 @@ if (tasks) {
                             if (response.status === 200) {
                                 e.target.parentElement.parentElement.remove();
 
+
                                 /* Alert Opcional */
                                 Swal.fire(
                                     'Tarea Eliminada!',
@@ -47,6 +50,7 @@ if (tasks) {
                                     'success'
                                 );
                             }
+                            updateAvance();
                         })
                 }
             })

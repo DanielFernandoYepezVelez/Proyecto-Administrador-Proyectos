@@ -5,67 +5,65 @@ const Project = require('../models/Projects');
 const Task = require('../models/Tasks');
 
 router.post('/task/:url', async(req, res, next) => {
-    const { url } = req.params;
-    const { task } = req.body;
-    const state = 0;
+    try {
+        const { url } = req.params;
+        const { task } = req.body;
+        const state = 0;
+        let errors = [];
 
-    /* Me Entrega El ID */
-    const project = await Project.findOne({ where: { url } });
-    const projectId = project.id;
+        if (!task) errors.push({ "text": "Agregar Tarea Al Proyecto" });
 
-    const result = await Task.create({ task, state, projectId });
+        /* Me Entrega El ID */
+        if (!errors.length > 0) {
+            const project = await Project.findOne({ where: { url } });
+            const projectId = project.id;
 
-    if (!result) return next();
+            const result = await Task.create({ task, state, projectId });
+            if (!result) return next();
+        }
 
-    res.redirect(`/${url}`);
+        res.redirect(`/project/${url}`);
+    } catch (error) {
+        console.log(error);
+    }
 });
 
 router.patch('/task/:id', async(req, res, next) => {
-    const { id } = req.params;
-    let state = 0;
+    try {
+        const { id } = req.params;
+        let state = 0;
 
-    const task = await Task.findOne({ where: { id } });
+        const task = await Task.findOne({ where: { id } });
 
-    if (task.state === state) state = 1;
-    task.state = state;
+        if (task.state === state) state = 1;
+        task.state = state;
 
-    const result = await task.save();
-    if (!result) return next();
+        const result = await task.save();
+        if (!result) return next();
 
-    res.json({
-        ok: true,
-        message: 'Estado Cambiado Exitosamente'
-    });
+        res.json({
+            ok: true,
+            message: 'Estado Cambiado Exitosamente'
+        });
+    } catch (error) {
+        console.log(error);
+    }
 });
 
 router.delete('/task/:id', async(req, res, next) => {
-    const { id } = req.params;
+    try {
+        const { id } = req.params;
 
-    const result = await Task.destroy({ where: { id } });
-    if (!result) return next();
+        const result = await Task.destroy({ where: { id } });
+        if (!result) return next();
 
-    res.json({
-        ok: true,
-        message: 'Tarea Eliminada Exitosamente'
-    });
+        res.json({
+            ok: true,
+            message: 'Tarea Eliminada Exitosamente'
+        });
+    } catch (error) {
+        console.log(error);
+    }
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 module.exports = router;
