@@ -18,16 +18,27 @@ router.post('/user/createAccount', async(req, res) => {
             password
         });
 
-        res.redirect('/user/sign-in');
+        res.redirect('/user/signIn');
     } catch (error) {
+        /* Todos los errores, pasan a la categoria de error, y se le pasan a error flash despues de mapearlos y req.flash se asigna a mensajes */
         req.flash('error', error.errors.map(error => error.message));
 
         res.render('createAccount', {
-            errors: req.flash(),
-            title: 'Crear Cuenta En UpTask'
+            mensajes: req.flash(),
+            title: 'Crear Cuenta En UpTask',
+            email,
+            password
         });
     }
 });
 
+router.get('/user/signIn', (req, res) => {
+    const { error } = res.locals.mensajes;
+
+    res.render('signIn', {
+        title: 'Iniciar Sesión En Uptask',
+        error
+    });
+});
 
 module.exports = router;

@@ -43,7 +43,14 @@ const Users = db.define('users', {
     }
 });
 
+/* Metodos Personalizados (Este es para passport)*/
+/* Es Obligatorio Utilizar Una function Normal Y NO
+Una Function de flecha */
+Users.prototype.passwordVerify = function(password) {
+    return bcrypt.compareSync(password, this.password);
+}
+
 /* Relación De Uno A Muchos */
-Users.hasMany(Projects);
+// Users.hasMany(Projects);
 
 module.exports = Users;

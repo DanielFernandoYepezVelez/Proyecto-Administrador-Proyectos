@@ -5,6 +5,7 @@ export const updateAvance = () => {
     /* Seleccionar Las Tareas Existentes */
     const tasks = document.querySelectorAll('li.tarea');
 
+    /* LOGICA BARRA DE AVANCE */
     if (tasks.length) {
         /* Seleccionar Las Tareas Completadas */
         const tasksCompleted = document.querySelectorAll('i.completo');

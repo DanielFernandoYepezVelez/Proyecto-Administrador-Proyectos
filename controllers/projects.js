@@ -54,7 +54,7 @@ router.get('/project/:url', async(req, res, next) => {
 
 /* Edit Project */
 /* Codigo Mejorado, Consultas Independientes */
-router.get('/project/:id', async(req, res) => {
+router.get('/project/edit/:id', async(req, res) => {
     try {
         const { id } = req.params;
 

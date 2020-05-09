@@ -6,14 +6,10 @@ html(lang="es" dir="ltr")
     .contenedor-formulario
       h1= title
 
-      if locals.mensajes
-        .alertas
-          each categoria in Object.keys(locals.mensajes)
-            each error in mensajes[categoria]
-              .alerta(class=`${categoria}`)
-                p= error
+      if error
+        p.alerta.error= error
 
-      form#formulario.caja.caja-login(action="/user/createAccount" method="POST")
+      form#formulario.caja.caja-login(action="/user/signIn" method="POST")
         .campo
           label(for="email") E-mail:
           input(type="email" name="email" placeholder="Email" value= email)
@@ -21,6 +17,6 @@ html(lang="es" dir="ltr")
           label(for="password") Password:
           input(type="password", name="password" placeholder="password" value= password)
         .campo.enviar
-          input.boton(type="submit" value="Crear Cuenta")
+          input.boton(type="submit" value="Iniciar SeSIÓN")
         .campo
-          a(href="/user/signIn") Volver a Iniciar Sesión
+          a(href="/user/newAccount") ¿Aún No Tienes Cuenta? Crea Una Gratis
