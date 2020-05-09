@@ -2,11 +2,12 @@ const passport = require('passport');
 const localStrategy = require('passport-local').Strategy;
 
 const Usuarios = require('../models/Users');
+const { validateEmail } = require('../helpers/validateEmail');
 
 passport.use(new localStrategy({
         /* Por defecto passport espera un usuario y password, pero yo lo puedo reescribir, como yo lo tenga en mi inicio de sesión */
         usernameField: 'email',
-        passwordField: 'password'
+        passwordField: 'password',
     },
     async(email, password, done) => {
         try {
@@ -30,7 +31,7 @@ passport.use(new localStrategy({
         } catch (error) {
             /* Ese Usuario No Existe */
             return done(null, false, {
-                message: 'Correo Incorrecto'
+                message: 'Correo Eléctronico Incorrecto'
             })
         }
     }

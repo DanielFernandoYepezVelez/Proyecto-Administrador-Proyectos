@@ -6,13 +6,10 @@ html(lang="es" dir="ltr")
     .contenedor-formulario
       h1= title
 
-      if locals.mensajes
-        .alertas
-          each categoria in Object.keys(locals.mensajes)
-            each error in mensajes[categoria]
-              .alerta(class=`${categoria}`)
-                p= error
-
+      if errors
+        each error in errors
+          p.alerta.error= error
+        
       form#formulario.caja.caja-login(action="/user/createAccount" method="POST")
         .campo
           label(for="email") E-mail:

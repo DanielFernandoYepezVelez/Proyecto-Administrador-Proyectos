@@ -3,8 +3,9 @@ const router = Router();
 
 const Project = require('../models/Projects');
 const Task = require('../models/Tasks');
+const { authorizationUser } = require('../middlewares/authorization');
 
-router.post('/task/:url', async(req, res, next) => {
+router.post('/task/:url', authorizationUser, async(req, res, next) => {
     try {
         const { url } = req.params;
         const { task } = req.body;
@@ -28,7 +29,7 @@ router.post('/task/:url', async(req, res, next) => {
     }
 });
 
-router.patch('/task/:id', async(req, res, next) => {
+router.patch('/task/:id', authorizationUser, async(req, res, next) => {
     try {
         const { id } = req.params;
         let state = 0;
@@ -50,7 +51,7 @@ router.patch('/task/:id', async(req, res, next) => {
     }
 });
 
-router.delete('/task/:id', async(req, res, next) => {
+router.delete('/task/:id', authorizationUser, async(req, res, next) => {
     try {
         const { id } = req.params;
 

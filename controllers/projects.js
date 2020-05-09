@@ -4,10 +4,12 @@ const router = Router();
 
 const Project = require('../models/Projects');
 const Task = require('../models/Tasks');
+const { authorizationUser } = require('../middlewares/authorization');
 
-router.get('/', async(req, res) => {
+router.get('/', authorizationUser, async(req, res) => {
     try {
-        const projectsAll = await Project.findAll();
+        const userId = res.locals.user.id
+        const projectsAll = await Project.findAll({ where: { userId } });
 
         res.render('layout/main', { title: 'Proyectos', projectsAll });
     } catch (error) {
@@ -15,9 +17,10 @@ router.get('/', async(req, res) => {
     }
 });
 
-router.get('/project/newProject', async(req, res) => {
+router.get('/project/newProject', authorizationUser, async(req, res) => {
     try {
-        const projectsAll = await Project.findAll();
+        const userId = res.locals.user.id
+        const projectsAll = await Project.findAll({ where: { userId } });
 
         res.render('newProject', { title: 'Nuevo Proyecto', projectsAll });
     } catch (error) {
@@ -27,12 +30,13 @@ router.get('/project/newProject', async(req, res) => {
 
 /* List Project */
 /* Codigo Mejorado, Consultas Independientes */
-router.get('/project/:url', async(req, res, next) => {
+router.get('/project/:url', authorizationUser, async(req, res, next) => {
     try {
         const { url } = req.params;
+        const userId = res.locals.user.id
 
-        const projectsAllPromise = Project.findAll();
-        const projectOnePromise = Project.findOne({ where: { url } });
+        const projectsAllPromise = Project.findAll({ where: { userId } });
+        const projectOnePromise = Project.findOne({ where: { url, userId } });
 
         const [projectsAll, projectOne] = await Promise.all([projectsAllPromise, projectOnePromise]);
 
@@ -54,12 +58,14 @@ router.get('/project/:url', async(req, res, next) => {
 
 /* Edit Project */
 /* Codigo Mejorado, Consultas Independientes */
-router.get('/project/edit/:id', async(req, res) => {
+router.get('/project/edit/:id', authorizationUser, async(req, res) => {
     try {
         const { id } = req.params;
+        const userId = res.locals.user.id
 
-        const projectsAllPromise = Project.findAll();
-        const projectOnePromise = Project.findOne({ where: { id } });
+        const projectsAllPromise = Project.findAll({ where: { userId } });
+        const projectOnePromise = Project.findOne({ where: { id, userId } });
+
         const [projectsAll, projectOne] = await Promise.all([projectsAllPromise, projectOnePromise]);
 
         res.render('editProject', { title: 'Editar Proyecto', projectOne, projectsAll });
@@ -68,17 +74,21 @@ router.get('/project/edit/:id', async(req, res) => {
     }
 });
 
-router.post('/project/newProject', [body('nameProject').not().isEmpty().trim().escape()], async(req, res) => {
+router.post('/project/newProject', authorizationUser, [body('nameProject').not().isEmpty().trim().escape()], async(req, res) => {
     try {
         const { nameProject } = req.body;
+        const userId = res.locals.user.id
         let errors = [];
 
-        const projectsAll = await Project.findAll();
+        const projectsAll = await Project.findAll({ where: { userId } });
 
         if (!nameProject) errors.push({ "texto": "Agregar Nombre Al Proyecto" });
 
-        if (errors.length > 0) res.render('newProject', { errors, projectsAll });
-        else await Project.create({ "nameProject": nameProject, "url": null })
+        if (errors.length > 0) {
+            res.render('newProject', { errors, projectsAll });
+        } else {
+            await Project.create({ "nameProject": nameProject, "url": null, userId });
+        }
 
         res.redirect('/');
     } catch (error) {
@@ -86,12 +96,13 @@ router.post('/project/newProject', [body('nameProject').not().isEmpty().trim().e
     }
 });
 
-router.post('/project/:id', [body('nameProject').not().isEmpty().trim().escape()], async(req, res) => {
+router.post('/project/:id', authorizationUser, [body('nameProject').not().isEmpty().trim().escape()], async(req, res) => {
     const { id } = req.params;
     const { nameProject } = req.body;
+    const userId = res.locals.user.id
     let errors = [];
 
-    const projectsAll = await Project.findAll();
+    const projectsAll = await Project.findAll({ where: { userId } });
 
     if (!nameProject) errors.push({ "texto": "Agregar Nombre Al Proyecto" });
 
@@ -101,7 +112,7 @@ router.post('/project/:id', [body('nameProject').not().isEmpty().trim().escape()
     res.redirect('/');
 });
 
-router.delete('/project/:url', async(req, res, next) => {
+router.delete('/project/:url', authorizationUser, async(req, res, next) => {
     try {
         /* Puedo Tomar Por Params O Query */
         // const { url } = req.params;

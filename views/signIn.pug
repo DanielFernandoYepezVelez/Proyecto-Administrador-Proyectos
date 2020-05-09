@@ -5,9 +5,15 @@ html(lang="es" dir="ltr")
   body.login
     .contenedor-formulario
       h1= title
+      
+      if errors
+        each error in errors
+          p.alerta.error= error
 
-      if error
-        p.alerta.error= error
+      if success
+        each successfuly in success
+          .correcto
+            p= successfuly
 
       form#formulario.caja.caja-login(action="/user/signIn" method="POST")
         .campo
@@ -18,5 +24,6 @@ html(lang="es" dir="ltr")
           input(type="password", name="password" placeholder="password" value= password)
         .campo.enviar
           input.boton(type="submit" value="Iniciar SeSIÓN")
-        .campo
-          a(href="/user/newAccount") ¿Aún No Tienes Cuenta? Crea Una Gratis
+        .campo.acciones
+          a(href="/user/newAccount") ¿Aún No Tienes Cuenta?
+          a(href="/user/resetPassword") ¿Olvidaste Tu Contraseña?

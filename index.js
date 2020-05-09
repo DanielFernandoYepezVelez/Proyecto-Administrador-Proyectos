@@ -16,10 +16,9 @@ const app = express();
 
 /* Initializations */
 app.set('view engine', 'pug');
-app.set('views', path.join(__dirname, './views/'));
+app.set('views', path.join(__dirname, './views'));
 
 /* Middlewares */
-app.use(require('./middlewares/vardump').vardump);
 app.use(bodyParser.urlencoded({ extended: true }));
 /* Esta es requerida para que las de abajo funcionen */
 app.use(cookieParser());
@@ -27,13 +26,16 @@ app.use(cookieParser());
 app.use(expSession({
     secret: 'supersecreto',
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
 }));
 app.use(flash());
+/* Flash Necesita Sessiones */
 app.use(require('./middlewares/connectFlash').connectFlash);
 /* Aqui Va Ha Ir A Las libs De Passport */
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(require('./middlewares/vardump').vardump);
+app.use(require('./middlewares/userConnected').userConnected);
 
 /* Routes */
 app.use('/', require('./routes/index'));
