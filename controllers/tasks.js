@@ -12,7 +12,10 @@ router.post('/task/:url', authorizationUser, async(req, res, next) => {
         const state = 0;
         let errors = [];
 
-        if (!task) errors.push({ "text": "Agregar Tarea Al Proyecto" });
+        if (!task) {
+            errors.push({ "text": "Agregar Tarea Al Proyecto" });
+            req.flash('error', 'Agregar Una Tarea Al Proyecto');
+        }
 
         /* Me Entrega El ID */
         if (!errors.length > 0) {

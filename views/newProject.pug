@@ -6,7 +6,7 @@ block contenido
 
     if errors
       each error in errors
-        .alerta.error= error.texto
+        .alerta.error= error
 
     form.agregar-proyecto(action=`/project/newProject` method="POST")
         .campo

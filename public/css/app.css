@@ -292,7 +292,7 @@ body.index {
     text-align: center;
     /* font-size: 0.9rem; */
     font-size: 1rem;
-    /* font-weight: 900; */
+    font-weight: 700;
     /* max-width: 300px; */
     max-width: max-content;
     margin: 0 auto 0.5rem auto;
@@ -315,6 +315,7 @@ body.index {
     background-color: rgb(53, 163, 53);
     border: 1px solid green;
     max-width: max-content;
+    font-weight: 700;
     margin: 0 auto 0.5rem auto;
     text-transform: uppercase;
 }

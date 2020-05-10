@@ -4,6 +4,10 @@ block contenido
   .contenido-principal
     h1 #{title} - #{projectOne.nameProject}
 
+    if errors
+      each error in errors
+        p.alerta.error= error
+      
     form.agregar-tarea(action=`/task/${projectOne.url}` method="POST")
       .campo
         label(for="task") Tarea:

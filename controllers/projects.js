@@ -7,25 +7,18 @@ const Task = require('../models/Tasks');
 const { authorizationUser } = require('../middlewares/authorization');
 
 router.get('/', authorizationUser, async(req, res) => {
-    try {
-        const userId = res.locals.user.id
-        const projectsAll = await Project.findAll({ where: { userId } });
+    /* Viene Del Middleware UserConnected */
+    const userId = res.locals.user.id
+    const projectsAll = await Project.findAll({ where: { userId } });
 
-        res.render('layout/main', { title: 'Proyectos', projectsAll });
-    } catch (error) {
-        console.log(error);
-    }
+    res.render('layout/main', { title: 'Proyectos', projectsAll });
 });
 
 router.get('/project/newProject', authorizationUser, async(req, res) => {
-    try {
-        const userId = res.locals.user.id
-        const projectsAll = await Project.findAll({ where: { userId } });
+    const userId = res.locals.user.id
+    const projectsAll = await Project.findAll({ where: { userId } });
 
-        res.render('newProject', { title: 'Nuevo Proyecto', projectsAll });
-    } catch (error) {
-        console.log(error);
-    }
+    res.render('newProject', { title: 'Nuevo Proyecto', projectsAll });
 });
 
 /* List Project */
@@ -33,7 +26,7 @@ router.get('/project/newProject', authorizationUser, async(req, res) => {
 router.get('/project/:url', authorizationUser, async(req, res, next) => {
     try {
         const { url } = req.params;
-        const userId = res.locals.user.id
+        const userId = res.locals.user.id;
 
         const projectsAllPromise = Project.findAll({ where: { userId } });
         const projectOnePromise = Project.findOne({ where: { url, userId } });
@@ -48,9 +41,15 @@ router.get('/project/:url', authorizationUser, async(req, res, next) => {
         //     { model: Project }
         // ]
 
-        if (!projectOne) return next();
+        // if (!projectOne) return next();
 
-        res.render('tasks', { title: 'Tareas Proyecto', projectOne, projectsAll, tasks });
+        res.render('./tasks', {
+            errors: res.locals.errors,
+            title: 'Tareas Proyecto',
+            projectOne,
+            projectsAll,
+            tasks
+        });
     } catch (error) {
         console.log(error);
     }
@@ -74,22 +73,25 @@ router.get('/project/edit/:id', authorizationUser, async(req, res) => {
     }
 });
 
+/* Guardamos Proyecto Si Es Correcto */
 router.post('/project/newProject', authorizationUser, [body('nameProject').not().isEmpty().trim().escape()], async(req, res) => {
     try {
         const { nameProject } = req.body;
-        const userId = res.locals.user.id
-        let errors = [];
+        const userId = res.locals.user.id;
 
         const projectsAll = await Project.findAll({ where: { userId } });
 
-        if (!nameProject) errors.push({ "texto": "Agregar Nombre Al Proyecto" });
+        if (!nameProject) {
+            req.flash('error', 'Agregar Nombre Al Proyecto');
 
-        if (errors.length > 0) {
-            res.render('newProject', { errors, projectsAll });
-        } else {
-            await Project.create({ "nameProject": nameProject, "url": null, userId });
+            return res.render('./newProject', {
+                errors: req.flash('error'),
+                title: 'Nuevo Proyecto',
+                projectsAll
+            });
         }
 
+        await Project.create({ "nameProject": nameProject, "url": null, userId });
         res.redirect('/');
     } catch (error) {
         console.log(error);
@@ -126,7 +128,6 @@ router.delete('/project/:url', authorizationUser, async(req, res, next) => {
             ok: true,
             message: 'Proyecto Eliminado Correctamente'
         });
-
     } catch (error) {
         console.log(error);
     }

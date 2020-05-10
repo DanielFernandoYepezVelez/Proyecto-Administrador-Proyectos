@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt-nodejs');
 const router = Router();
 
 const Usuario = require('../models/Users');
+const { sendEmail } = require('../handlers/email');
 
 router.post('/user/signIn',
     passport.authenticate('local', {
@@ -53,9 +54,19 @@ router.post('/user/tokenGenerate', async(req, res) => {
 
         /* URL DE RESET */
         /* http://${req.headers.host} Me Entrega El Host Donde Esta Corriendo El Programa */
-        const resetUrl = `http://${req.headers.host}/resetPassword/${user.token}`;
+        const resetUrl = `http://${req.headers.host}/resetNewPassword/${user.token}`;
 
-        return res.redirect(`/resetNewPassword/${user.token}`);
+        /* Por eso utilizamos util, y le paso un objeto con opciones, no olvidar que todos los objetos en js se pasan por referencia, todo esto va para, handlers en email */
+        await sendEmail({
+            user,
+            subject: 'Password Reset',
+            resetUrl,
+            view: 'resetPassword'
+        });
+
+        req.flash('correcto', 'Revisar El Correo Eléctronico');
+        res.redirect('/user/signIn');
+        // return res.redirect(`/resetNewPassword/${user.token}`);
     } catch {
         /* Verificar que el usuario Exista */
         if (!email) {
