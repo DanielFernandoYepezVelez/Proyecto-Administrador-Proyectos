@@ -1,6 +1,7 @@
 /* Llamados Requeridos */
 const passport = require('./libs/passport');
-require('./config/enviroment');
+/* Importar Variables De Entorno */
+require('dotenv').config({ path: 'variables.env' });
 require('./database/connect');
 
 /* Dependencies */
@@ -44,7 +45,11 @@ app.use('/', require('./routes/index'));
 // app.use(express.static(path.resolve(__dirname, './public')));
 app.use(express.static(path.join(__dirname, './public')));
 
-/* Starting The Sever */
-app.listen(process.env.PORT, () => {
-    console.log(`Server On Port ${process.env.PORT}`);
+/* Server And Port */
+const host = process.env.HOST || '0.0.0.0';
+const port = process.env.PORT || 3001;
+
+/* Starting The Sever*/
+app.listen(port, host, () => {
+    console.log(`Server ${host} On Port ${port}`);
 });

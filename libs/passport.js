@@ -13,7 +13,8 @@ passport.use(new localStrategy({
         try {
             const user = await Usuarios.findOne({
                 where: {
-                    email
+                    email,
+                    activo: 1
                 }
             });
 

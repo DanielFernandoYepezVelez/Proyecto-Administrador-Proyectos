@@ -21,6 +21,5 @@ html(lang="es" dir="ltr")
                   a(href=`/project/${project.url}`)= project.nameProject
       block contenido
         .contenido-principal
-          h1= title
-        pre= vardump(projectsAll)
+          h1= title        
     script(src="/dist/bundle.js")

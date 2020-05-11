@@ -93,6 +93,7 @@ router.get('/resetNewPassword/:token', async(req, res) => {
     }
 
     res.render('resetNewPassword', {
+        errors: res.locals.errors,
         title: 'Ingresar Nueva Contraseña'
     });
 });
@@ -113,6 +114,11 @@ router.post('/resetNewPassword/:token', async(req, res) => {
 
     if (!user) {
         req.flash('error', 'Correo No Válido');
+        res.redirect('/user/resetPassword');
+    }
+
+    if (!password) {
+        req.flash('error', 'Ingresar Una Constraseña Válida');
         res.redirect('/user/resetPassword');
     }
 

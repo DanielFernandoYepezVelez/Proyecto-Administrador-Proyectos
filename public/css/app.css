@@ -297,6 +297,7 @@ body.index {
     max-width: max-content;
     margin: 0 auto 0.5rem auto;
     text-transform: uppercase;
+    border-radius: 30px;
 }
 
 .error {
@@ -318,6 +319,7 @@ body.index {
     font-weight: 700;
     margin: 0 auto 0.5rem auto;
     text-transform: uppercase;
+    border-radius: 30px;
 }
 
 .correcto p {
