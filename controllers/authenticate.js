@@ -1,6 +1,6 @@
 const { Router } = require('express');
 const passport = require('passport');
-const Op = require('Sequelize').Op;
+// const Op = require('Sequelize').Op;
 const crypto = require('crypto');
 const bcrypt = require('bcrypt-nodejs');
 const router = Router();
